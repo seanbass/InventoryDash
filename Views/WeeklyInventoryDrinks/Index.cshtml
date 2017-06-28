@@ -1,0 +1,164 @@
+﻿@model List<InventoryDash.Models.WeeklyInventoryDrinksViewModel>
+
+@{
+    ViewBag.Title = "Weekly Drink Sales";
+}
+
+<h2>Drink Sales - </h2>
+
+@{
+    int selectedYear = Convert.ToInt32(ViewData["selectedYear"]);
+    //Determining the week span of dates Monday to Sunday, based off today's date.
+    int counter = 0;
+    int dayOfWeek = Convert.ToInt32(DateTime.Today.DayOfWeek);
+    int currentYear = Convert.ToInt32(DateTime.Today.Year);
+    string mondayOfWeek = "";
+    string sundayOfWeek = "";
+    switch (dayOfWeek)
+    {
+        case 0: //Sunday
+            mondayOfWeek = DateTime.Today.AddDays(-6).ToString("D");
+            sundayOfWeek = DateTime.Today.ToString("D");
+            break;
+        case 1: // Monday
+            mondayOfWeek = DateTime.Today.ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(6).ToString("D");
+            break;
+        case 2: //Tuesday
+            mondayOfWeek = DateTime.Today.AddDays(-2).ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(5).ToString("D");
+            break;
+        case 3: //Wednesday
+            mondayOfWeek = DateTime.Today.AddDays(-2).ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(4).ToString("D");
+            break;
+        case 4:
+            mondayOfWeek = DateTime.Today.AddDays(-3).ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(3).ToString("D");
+            break;
+        case 5:
+            mondayOfWeek = DateTime.Today.AddDays(-4).ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(2).ToString("D");
+            break;
+        case 6:
+            mondayOfWeek = DateTime.Today.AddDays(-5).ToString("D");
+            sundayOfWeek = DateTime.Today.AddDays(1).ToString("D");
+            break;
+        default:
+            break;
+    }
+}
+@using (Html.BeginForm("Index", "WeeklyInventoryDrinks"))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <select id="yearSelect" name="yearSelect" class="form-control">
+                    @for (int i = Convert.ToInt32(ViewData["startingYear"]); i <= currentYear; i++)
+                    {
+                        if (i == Convert.ToInt32(ViewData["selectedYear"]))
+                        {
+                            <option value="@i" selected> @i.ToString() </option>
+                        }
+                        else
+                        {
+                            <option value="@i"> @i.ToString() </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-10">
+                <select id="weekSelect" name="weekSelect" class="form-control"></select>
+            </div>
+        </div>
+    </div>
+
+
+    @Html.Hidden("selectedWeekHolder", ViewData["weekOfYear"].ToString())
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h3>Breakfast Items</h3>
+                <table class="table">
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty (Dine-In)</th>
+                        <th>Qty (To-Go)</th>
+                    </tr>
+                    <tbody>
+                        @foreach (var s in (List<InventoryDash.Models.WeeklyInventoryDrinksViewModel>)Model)
+                        {
+                            <tr>
+                                <td>
+                                    @s.Name
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].DrinkID", s.DrinkId)
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].WeekId", s.WeekId > 0 ? s.WeekId : ViewData["weekOfYear"])
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].Year", s.Year > 0 ? s.Year : ViewData["selectedYear"])
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].ID", s.ID)
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].Cost", s.Cost)
+                                    @Html.Hidden("weeklyInventoryDrinks[" + @counter + "].Income", s.Income)
+                                </td>
+
+                                <td class="col-md-1">@Html.TextBox("weeklyInventoryDrinks[" + @counter + "].QuantityDineIn", s.QuantityDineIn)</td>
+                                <td class="col-md-1">@Html.TextBox("weeklyInventoryDrinks[" + @counter + "].QuantityToGo", s.QuantityToGo)</td>
+                            </tr>
+                            counter = counter + 1;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <input type="submit" value="Submit Changes" class="btn btn-block btn-primary " />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <h3>Summary</h3>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Item</th>
+                    <th>Qty (Dine-In)</th>
+                    <th>Qty (To-Go)</th>
+                    <th>Total Qty</th>
+                    <th>Total Cost</th>
+                    <th>Total Income</th>
+                </tr>
+                @{ int totalQuantity = 0;
+                    decimal collectCost = 0;
+                    decimal collectIncome = 0;
+                }
+                <tbody>
+                    @foreach (var s in (List<InventoryDash.Models.WeeklyInventoryDrinksViewModel>)Model)
+                    {
+                        totalQuantity = Convert.ToInt32(s.QuantityToGo) + Convert.ToInt32(s.QuantityDineIn);
+                        collectCost += Convert.ToDecimal(s.Cost);
+                        collectIncome += Convert.ToDecimal(s.Income);
+                        <tr>
+                            <td>@s.Name</td>
+                            <td>@s.QuantityDineIn</td>
+                            <td>@s.QuantityToGo</td>
+                            <td>@totalQuantity</td>
+                            <td>$@s.Cost</td>
+                            <td>$@s.Income</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4" align="right">Grand Total:</td>
+                        <td class="grandTotalCell">$@collectCost</td>
+                        <td class="grandTotalCell">$@collectIncome</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>

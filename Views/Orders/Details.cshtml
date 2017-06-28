@@ -1,0 +1,74 @@
+﻿@model InventoryDash.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IngredientID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IngredientID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Portions)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Portions)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PortionsRemaining)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PortionsRemaining)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpirationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MyID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

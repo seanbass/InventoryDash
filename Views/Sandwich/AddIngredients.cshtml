@@ -1,0 +1,87 @@
+﻿@model IEnumerable<InventoryDash.Models.Ingredient>
+
+@{
+    ViewBag.Title = "AddIngredients";
+}
+
+<h2>Add Ingredients</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h3>Bread</h3>
+    <input type="hidden" name="sandwichID" id="sandwichId" value="@ViewBag.ID" />
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.bread)
+        {
+            <div class="checkbox">
+                @*@Html.CheckBoxFor(model => item.UsedInSandwich)*@
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @item.Name
+            </div>
+        }
+    }
+    <h3>Protein</h3>
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.protein)
+        {
+            <div class="checkbox">
+
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @item.Name
+            </div>
+        }
+    }
+    <h3>Dairy</h3>
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.dairy)
+        {
+            <div class="checkbox">
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @item.Name
+            </div>
+        }
+    }
+    <h3>Produce</h3>
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.produce)
+        {
+            <div class="checkbox">
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @item.Name
+            </div>
+        }
+    }
+    <h3>Condiments</h3>
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.condiment)
+        {
+            <div class="checkbox">
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @item.Name
+            </div>
+        }
+    }
+    <h3>To-Gos</h3>
+    foreach (var item in Model)
+    {
+        if (item.Category == InventoryDash.Models.category.togo)
+        {
+            <div class="checkbox">
+                <input type="checkbox" name="ingredient" value="@item.ID" />
+                @*@<input type="checkbox" name="foodItem" value="@item.ID"/>*@
+                @item.Name
+            </div>
+        }
+    }
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Add Ingredients" class="btn btn-default" />
+        </div>
+    </div>

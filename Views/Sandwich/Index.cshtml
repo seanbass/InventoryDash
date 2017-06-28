@@ -1,0 +1,80 @@
+﻿@model IEnumerable<InventoryDash.Models.Sandwich>
+
+@{
+    ViewBag.Title = "Sandwiches";
+}
+
+<h2>Sandwiches</h2>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#breakfast">Breakfast</a></li>
+    <li><a data-toggle="tab" href="#lunch">Lunch</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="breakfast" class="tab-pane fade in active">
+        <h3>Breakfast</h3>
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>@Html.DisplayNameFor(model => model.CurrentCost)</th>
+                <th>@Html.DisplayNameFor(model => model.Ingredients)</th>
+            </tr>
+            @foreach (InventoryDash.Models.Sandwich s in Model)
+            {
+                if (s.Meal == InventoryDash.Models.meal.breakfast || s.Meal == InventoryDash.Models.meal.both)
+                {
+                    string ingredients = s.GetIngredients(s);
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => s.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => s.Price)</td>
+                        <td>@s.PrintCost()</td>
+
+                        <td>@ingredients</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = s.ID }) |
+                            @Html.ActionLink("Details", "Details", new { id = s.ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = s.ID })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <div id="lunch" class="tab-pane fade">
+        <h3>Lunch</h3>
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>@Html.DisplayNameFor(model => model.CurrentCost)</th>
+                <th>@Html.DisplayNameFor(model => model.Ingredients)</th>
+            </tr>
+            @foreach (InventoryDash.Models.Sandwich s in Model)
+            {
+                if (s.Meal == InventoryDash.Models.meal.lunch || s.Meal == InventoryDash.Models.meal.both)
+                {
+                    string ingredients = s.GetIngredients(s);
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => s.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => s.Price)</td>
+                        <td>@s.PrintCost()</td>
+                        <td>@ingredients</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = s.ID }) |
+                            @Html.ActionLink("Details", "Details", new { id = s.ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = s.ID })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
